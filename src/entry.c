@@ -1,5 +1,7 @@
 #include "entry.h"
 
+#define INPUT_SIZE 100
+
 entry_t* new_entry(){
     
     entry_t* entry;
@@ -71,17 +73,17 @@ int verify_command(char* command){
     
     type = strcmp(command, "exit") * strcmp(command, "init");
     type *= strcmp(command, "load");
-    if(!type) return 1;
+    if(!type) return EXEC_TYPE;
     
     type = strcmp(command, "ls") * strcmp(command, "mkdir");
-    if(!type) return 2;
+    if(!type) return DIR_TYPE;
     
     type = strcmp(command, "create") * strcmp(command, "unlink");
     type *= strcmp(command, "read");
-    if(!type) return 3;
+    if(!type) return DOC_TYPE;
     
     type = strcmp(command, "write") * strcmp(command, "append");
-    if(!type) return 4;
+    if(!type) return STR_TYPE;
     
     return 0;
 }

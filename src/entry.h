@@ -5,9 +5,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+// command types
+#define EXEC_TYPE 1
+#define DIR_TYPE 2
+#define DOC_TYPE 3
+#define STR_TYPE 4
+
 #define COMMAND_SIZE 10
 #define STRING_SIZE 50
-#define INPUT_SIZE 100
 
 typedef struct entry_t{
     int type;

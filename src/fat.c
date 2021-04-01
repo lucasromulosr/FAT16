@@ -1,5 +1,6 @@
-#include <unistd.h>
 #include "entry.h"
+
+#include <unistd.h>
 
 void get_entry(entry_t*);
 
