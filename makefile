@@ -3,7 +3,7 @@
 # 2) Change source path.
 
 # Executable name
-EXEC=fat16
+EXEC=shell
 
 # Source files
 SRC=./src/
@@ -32,8 +32,8 @@ all: objFolder $(OBJ)
 
 install: binFolder all
 	@ echo 'Building binaries using $(CC)...'
-	@ $(CC) -o ./bin/$(EXEC) ./obj/shell.o
-	#@ $(CC) -o ./bin/reporter ./obj/reporter.o
+	@ $(CC) -o ./bin/$(EXEC) ./obj/shell.o ./obj/entry.o
+	@ $(CC) -o ./bin/fat ./obj/fat.o ./obj/entry.o
 	@ echo 'ok'
 
 objFolder:
