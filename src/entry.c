@@ -59,6 +59,9 @@ entry_t* read_entry(){
                             entry->path = extract_path(input, &index);
                             return entry;
                         }
+                case 5: 
+                        printf("See ya!!\n");
+                        return entry;
             }
         }
         else
@@ -71,8 +74,7 @@ int verify_command(char* command){
     
     int type;
     
-    type = strcmp(command, "exit") * strcmp(command, "init");
-    type *= strcmp(command, "load");
+    type = strcmp(command, "init") * strcmp(command, "load");
     if(!type) return EXEC_TYPE;
     
     type = strcmp(command, "ls") * strcmp(command, "mkdir");
@@ -84,6 +86,9 @@ int verify_command(char* command){
     
     type = strcmp(command, "write") * strcmp(command, "append");
     if(!type) return STR_TYPE;
+    
+    type = strcmp(command, "exit");
+    if(!type) return EXIT_TYPE;
     
     return 0;
 }

@@ -10,6 +10,7 @@
 #define DIR_TYPE 2
 #define DOC_TYPE 3
 #define STR_TYPE 4
+#define EXIT_TYPE 5
 
 #define COMMAND_SIZE 10
 #define STRING_SIZE 50
