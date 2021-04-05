@@ -113,6 +113,9 @@ char* extract_path(char* input, int* i){
     
     int index = 0;  // path index
     
+    if(input[*i] == '\n' || input[(*i)+1] == '\n')
+        return "";
+    
     (*i)++;
     
     while(input[*i] != '\n'){

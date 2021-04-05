@@ -32,7 +32,8 @@ all: objFolder $(OBJ)
 
 install: binFolder all
 	@ echo 'Building binaries using $(CC)...'
-	@ $(CC) -o ./bin/$(EXEC) ./obj/shell.o ./obj/entry.o
+	@ $(CC) -o ./bin/$(EXEC) ./obj/shell.o ./obj/entry.o \
+	./obj/fat.o
 	@ echo 'ok'
 
 objFolder:
