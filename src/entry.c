@@ -75,9 +75,10 @@ int verify_command(char* command){
     int type;
     
     type = strcmp(command, "init") * strcmp(command, "load");
+    type *= strcmp(command, "ls");
     if(!type) return EXEC_TYPE;
     
-    type = strcmp(command, "ls") * strcmp(command, "mkdir");
+    type = strcmp(command, "cd") * strcmp(command, "mkdir");
     if(!type) return DIR_TYPE;
     
     type = strcmp(command, "create") * strcmp(command, "unlink");
