@@ -1,7 +1,5 @@
 #include "fat.h"
 
-#include <string.h>
-
 /**** flag fat_loaded ****/
 int fat_loaded = FALSE;
 
@@ -9,10 +7,8 @@ int get_fat_loaded(){ return fat_loaded; }
 void set_fat_loaded(int i){ fat_loaded = i; }
 
 /**** convertions ****/
-uint8_t* ctohex(char* name){
+uint8_t* ctohex(char* name, uint8_t* filename){
     
-    uint8_t* filename;
-    filename = (uint8_t*) malloc (18 * sizeof(uint8_t)); 
     for(int i = 0; i < 18; i++) filename[i] = 0x0000;
     
     for(int i = 0; i < strlen(name); i++)
@@ -21,10 +17,8 @@ uint8_t* ctohex(char* name){
     return filename;
 }
 
-char* hextoc(uint8_t* filename){
+char* hextoc(uint8_t* filename, char* name){
     
-    char* name;
-    name = (char*) malloc (18 * sizeof(char));
     for(int i = 0; i < 18; i++)
         name[i] = '\0';
     
@@ -69,25 +63,31 @@ table_t* init_fat(){
     return table;
 }
 
-dir_t init_dir_entry(char* name, uint16_t first_block){ // TODO
+dir_t* init_dir_entry(char* name, uint16_t first_block){ // TODO
 
-    dir_t dir;
+    dir_t* dir;
+    dir = (dir_t*) malloc (sizeof(dir_t));
     
-//     dir.filename = ctohex(name);
-    dir.attributes = 0x0000;
-    dir.first_block = first_block;
-    dir.size = 0x0000;     // ver se vai mudar pra 2
+    for(int i = 0; i < 7; i++)
+        dir->reserved[i] = 0x0000;
+    
+    ctohex(name, dir->filename);
+    dir->attributes = 0x0000;
+    dir->first_block = first_block;
+    dir->size = 0x0000;     // ver se vai mudar pra 2
     
     return dir;
 }
 
-cluster_t* init_dir(uint8_t root, uint8_t first_block){ // TODO
+cluster_t init_dir(uint8_t root, uint8_t first_block){ // TODO
     
-    cluster_t* cluster;
-    cluster = init_cluster();
+    cluster_t cluster;
     
-    cluster->dir[0] = init_dir_entry(".", first_block);
-    cluster->dir[1] = init_dir_entry("..", root);
+    cluster.dir[0] = *init_dir_entry(".", first_block);
+    cluster.dir[1] = *init_dir_entry("..", root);
+    
+    for(int i = 2; i < CLUSTER/sizeof(dir_t); i++)
+        cluster.dir[i] = *init_dir_entry("", 0x0000);
     
     return cluster;
 }
@@ -118,11 +118,11 @@ cluster_t* get_root(FILE* file){
     
     cluster_t* cluster = init_cluster();
     
-    // jumps boot e fat table
-    fseek(file, BOOT*CLUSTER, SEEK_SET);
-    fseek(file, TABLE*CLUSTER, SEEK_CUR);
+//     // jumps boot and fat table
+//     fseek(file, BOOT*CLUSTER, SEEK_SET);
+//     fseek(file, TABLE*CLUSTER, SEEK_CUR);
     
-    fread(cluster, 1, CLUSTER, file);
+    fread(cluster, 1, sizeof(cluster_t), file);
     
     return cluster;
 }

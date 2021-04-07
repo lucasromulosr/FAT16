@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define TRUE 1
 #define FALSE 0
@@ -21,15 +22,15 @@ typedef struct table_t{
 } table_t;
 
 typedef struct dir_t{   // TODO
-    uint8_t filename[18];
+    uint8_t filename[18];   // 18
     uint8_t attributes;
-    uint8_t reserved[7];
+    uint8_t reserved[7];    // 7
     uint16_t first_block;
     uint32_t size;
 } dir_t;
 
 typedef union cluster_t{    // TODO
-    
+
     dir_t dir[CLUSTER/sizeof(dir_t)];
     uint8_t data[CLUSTER];
 
@@ -40,14 +41,15 @@ int get_fat_loaded();
 void set_fat_loaded(int);
 
 /**** convertions ****/
-uint8_t* ctohex(char*);
-char* hextoc(uint8_t*);
+uint8_t* ctohex(char*, uint8_t*);
+char* hextoc(uint8_t*, char*);
 
 /**** init ****/
 cluster_t* init_cluster();
 cluster_t* init_boot();
 table_t* init_fat();
-dir_t init_dir_entry(char*, uint16_t);
+dir_t* init_dir_entry(char*, uint16_t);  // passar pra ponteiro
+cluster_t init_dir(uint8_t, uint8_t);   // passar pra ponteiro
 
 /**** get ****/
 table_t* get_fat(FILE*);
@@ -59,9 +61,9 @@ uint8_t get_first_dir_empty(cluster_t*);
 
 
 void init();
-void load(table_t*, cluster_t*);
-void ls(cluster_t*);
-void mkdir(char*, table_t*, cluster_t*);
+void load();
+void ls();
+void mkdir(char*);
 
 
 
