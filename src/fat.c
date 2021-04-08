@@ -3,9 +3,11 @@
 table_t* table;
 cluster_t* current;
 
+char file_path[50] = "fat.part";
+
 void init(){
     
-    FILE* file = fopen("fat.part", "w");
+    FILE* file = fopen(file_path, "w");
     
     cluster_t* boot = init_boot();
     table = init_fat();
@@ -42,7 +44,7 @@ void init(){
 
 void load(){
 
-    FILE* file = fopen("fat.part", "r");
+    FILE* file = fopen(file_path, "r");
     
     if(file == NULL)
         printf("There is no FAT system in the disk!!\n");
@@ -83,7 +85,37 @@ void mkdir(char* name){
     current->dir[dir_empty] = dir;
     
     // creates dir cluster
-    // saves new cluster in file
+    cluster_t cluster =
+        init_dir(current->dir[0].first_block, fat_empty);
+    
+    FILE* file = fopen(file_path, "r+");
+    
+    int cur_dir = (int) (current->dir[0].first_block - 1);
+    fseek(file, (BOOT+TABLE+cur_dir)*CLUSTER, SEEK_SET);
+    fwrite(current, 1, CLUSTER, file);
+    
+    /* verificar se deu certo esse write */
+    cur_dir = (int) (fat_empty - 1);
+    fseek(file, (BOOT+TABLE+cur_dir)*CLUSTER, SEEK_SET);
+    fwrite(&cluster, 1, CLUSTER, file);
+    
+    /* salvar o valor do dir na tabela e no arquivo */
+    table->fat[BOOT+TABLE+cur_dir] = fat_empty;
+    
+    fseek(file, BOOT*CLUSTER, SEEK_SET);
+    fwrite(table, 1, TABLE*CLUSTER, file);
+
+
+
+    // testar se salvou o cluster
+    // ta ok, usar pra fazer o cd
+    fseek(file, (BOOT+TABLE+1)*CLUSTER, SEEK_SET);
+    fread(&cluster, 1, CLUSTER, file);
+    
+    *current = cluster;
+    
+    
+    fclose(file);
     
 }
 

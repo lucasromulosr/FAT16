@@ -98,7 +98,7 @@ uint16_t get_first_fat_empty(table_t* table){
     
     for(int i = BOOT+TABLE; i < FAT; i++)
         if(table->fat[i] == 0x0000)
-            return i;
+            return (uint16_t)(i - (BOOT+TABLE) + 1);
     
     printf("Theres no more space in the system!!\n");
     return FALSE;
