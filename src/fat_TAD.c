@@ -63,7 +63,7 @@ table_t* init_fat(){
     return table;
 }
 
-dir_t* init_dir_entry(char* name, uint16_t first_block){ // TODO
+dir_t* init_dir_entry(char* name, uint8_t attributes, uint16_t first_block){
 
     dir_t* dir;
     dir = (dir_t*) malloc (sizeof(dir_t));
@@ -72,22 +72,22 @@ dir_t* init_dir_entry(char* name, uint16_t first_block){ // TODO
         dir->reserved[i] = 0x0000;
     
     ctohex(name, dir->filename);
-    dir->attributes = 0x0000;
+    dir->attributes = attributes;
     dir->first_block = first_block;
-    dir->size = 0x0000;     // ver se vai mudar pra 2
+    dir->size = 0x0000;
     
     return dir;
 }
 
-cluster_t init_dir(uint8_t root, uint8_t first_block){ // TODO
+cluster_t init_dir(uint16_t root, uint16_t first_block){
     
     cluster_t cluster;
     
-    cluster.dir[0] = *init_dir_entry(".", first_block);
-    cluster.dir[1] = *init_dir_entry("..", root);
+    cluster.dir[0] = *init_dir_entry(".", 0x00, first_block);
+    cluster.dir[1] = *init_dir_entry("..", 0x00, root);
     
     for(int i = 2; i < CLUSTER/sizeof(dir_t); i++)
-        cluster.dir[i] = *init_dir_entry("", 0x0000);
+        cluster.dir[i] = *init_dir_entry("", 0x00, 0x0000);
     
     return cluster;
 }
@@ -98,7 +98,7 @@ uint16_t get_first_fat_empty(table_t* table){
     
     for(int i = BOOT+TABLE; i < FAT; i++)
         if(table->fat[i] == 0x0000)
-            return (uint16_t)(i - (BOOT+TABLE) + 1);
+            return (uint16_t)(i - (BOOT+TABLE));
     
     printf("Theres no more space in the system!!\n");
     return FALSE;
@@ -114,27 +114,61 @@ uint8_t get_first_dir_empty(cluster_t* current){
     return FALSE;
 }
 
-cluster_t* get_root(FILE* file){
+cluster_t* get_cluster(int offset){
+    
+    FILE* file = fopen("fat.part", "r");
     
     cluster_t* cluster = init_cluster();
     
-//     // jumps boot and fat table
-//     fseek(file, BOOT*CLUSTER, SEEK_SET);
-//     fseek(file, TABLE*CLUSTER, SEEK_CUR);
+    offset += BOOT+TABLE;
+    offset *= CLUSTER;
     
+//     // jumps boot, fat, offset
+    fseek(file, offset, SEEK_SET);
     fread(cluster, 1, sizeof(cluster_t), file);
+    
+    fclose(file);
     
     return cluster;
 }
 
-table_t* get_fat(FILE* file){
+table_t* get_fat(){
+    
+    FILE* file = fopen("fat.part", "r");
     
     table_t* table = init_fat();
     
     // jumps boot
     fseek(file, BOOT*CLUSTER, SEEK_SET);
-    
     fread(table, 1, TABLE*CLUSTER, file);
+    
+    fclose(file);
     
     return table;
 }
+
+
+/**** set ****/
+void set_fat(table_t* table){
+    
+    FILE* file = fopen("fat.part", "r+");
+    
+    fseek(file, BOOT*CLUSTER, SEEK_SET);
+    fwrite(table, 1, TABLE*CLUSTER, file);   
+    
+    fclose(file);
+}
+
+void set_cluster(int offset, cluster_t* cluster){
+    
+    offset += BOOT+TABLE;
+    offset *= CLUSTER;
+    
+    FILE* file = fopen("fat.part", "r+");
+    
+    fseek(file, offset, SEEK_SET);
+    fwrite(cluster, 1, CLUSTER, file);
+    
+    fclose(file);
+}
+

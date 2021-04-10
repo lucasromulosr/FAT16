@@ -21,7 +21,7 @@ typedef struct table_t{
     
 } table_t;
 
-typedef struct dir_t{   // TODO
+typedef struct dir_t{
     uint8_t filename[18];   // 18
     uint8_t attributes;
     uint8_t reserved[7];    // 7
@@ -29,7 +29,7 @@ typedef struct dir_t{   // TODO
     uint32_t size;
 } dir_t;
 
-typedef union cluster_t{    // TODO
+typedef union cluster_t{
 
     dir_t dir[CLUSTER/sizeof(dir_t)];
     uint8_t data[CLUSTER];
@@ -48,14 +48,18 @@ char* hextoc(uint8_t*, char*);
 cluster_t* init_cluster();
 cluster_t* init_boot();
 table_t* init_fat();
-dir_t* init_dir_entry(char*, uint16_t);  // passar pra ponteiro
-cluster_t init_dir(uint8_t, uint8_t);   // passar pra ponteiro
+dir_t* init_dir_entry(char*, uint8_t, uint16_t);  
+cluster_t init_dir(uint16_t, uint16_t);
 
 /**** get ****/
-table_t* get_fat(FILE*);
-cluster_t* get_root(FILE*);
+table_t* get_fat();
+cluster_t* get_cluster(int);
 uint16_t get_first_fat_empty(table_t*);
 uint8_t get_first_dir_empty(cluster_t*);
+
+/**** set ****/
+void set_fat(table_t*);
+void set_cluster(int, cluster_t*);
 
 
 
@@ -64,6 +68,8 @@ void init();
 void load();
 void ls();
 void mkdir(char*);
+void create(char*);
+void unlink(char*);
 
 
 

@@ -11,8 +11,8 @@ void init(){
     
     cluster_t* boot = init_boot();
     table = init_fat();
+    cluster_t root = init_dir(0xffff, 0xffff);
     cluster_t* cluster = init_cluster();
-    cluster_t root = init_dir(0x0001, 0x0001);
     
     // init fat table
     for(int i = 0; i < BOOT; i++)
@@ -21,7 +21,7 @@ void init(){
         table->fat[i] = 0xfffe;
     for(int i = BOOT + TABLE; i < FAT; i++)
         table->fat[i] = 0x0000;
-    table->fat[BOOT+TABLE] = 0x0001;    // root dir
+    table->fat[BOOT+TABLE] = 0xffff;    // root dir
     
     // write boot
     for(int i = 0; i < BOOT; i++)
@@ -48,14 +48,15 @@ void load(){
     
     if(file == NULL)
         printf("There is no FAT system in the disk!!\n");
+    
     else{
+        fclose(file);
         // load fat table and root dir
-        table = get_fat(file);
-        current = get_root(file);
+        table = get_fat();
+        current = get_cluster(0);
         printf("FAT system loaded!!\n");
         // set flag fat_loaded, close file
         set_fat_loaded(TRUE);
-        fclose(file);
     }
 }
 
@@ -81,43 +82,106 @@ void mkdir(char* name){
     
     // creates and add new dir to current dir
     dir_t dir;
-    dir = *init_dir_entry(name, (uint16_t)fat_empty);
+    dir = *init_dir_entry(name, 0x00, (uint16_t)fat_empty);
     current->dir[dir_empty] = dir;
     
     // creates dir cluster
     cluster_t cluster =
         init_dir(current->dir[0].first_block, fat_empty);
     
-    FILE* file = fopen(file_path, "r+");
+    // updates fat
+    int fat_pos = (int)fat_empty + BOOT+TABLE;
+    table->fat[fat_pos] = (uint16_t)fat_empty;
+    set_fat(table);    
     
-    int cur_dir = (int) (current->dir[0].first_block - 1);
-    fseek(file, (BOOT+TABLE+cur_dir)*CLUSTER, SEEK_SET);
-    fwrite(current, 1, CLUSTER, file);
+    // saves new dir cluster
+    set_cluster((int)fat_empty, &cluster);
     
-    /* verificar se deu certo esse write */
-    cur_dir = (int) (fat_empty - 1);
-    fseek(file, (BOOT+TABLE+cur_dir)*CLUSTER, SEEK_SET);
-    fwrite(&cluster, 1, CLUSTER, file);
-    
-    /* salvar o valor do dir na tabela e no arquivo */
-    table->fat[BOOT+TABLE+cur_dir] = fat_empty;
-    
-    fseek(file, BOOT*CLUSTER, SEEK_SET);
-    fwrite(table, 1, TABLE*CLUSTER, file);
-
-
-
-    // testar se salvou o cluster
-    // ta ok, usar pra fazer o cd
-    fseek(file, (BOOT+TABLE+1)*CLUSTER, SEEK_SET);
-    fread(&cluster, 1, CLUSTER, file);
-    
-    *current = cluster;
-    
-    
-    fclose(file);
-    
+    // updates current dir cluster
+    current->dir[0].size += 0x0001;
+    printf(". dir size: %d <---\n", current->dir[0].size);
+    uint16_t current_first_block = current->dir[0].first_block;
+    int current_pos = 
+        current_first_block == 0xffff ? 0 : current_first_block;
+    set_cluster((int)current_pos, current);
 }
+
+void create(char* name){
+    
+    // check flag fat loaded
+    if(!get_fat_loaded()){
+        printf("Please, load the system first!!\n");
+        return;
+    }
+    
+    // finds 1st empty cluster
+    uint16_t fat_empty = get_first_fat_empty(table);
+    if(!fat_empty)
+        return;
+    printf("Fat empty: %d\n", fat_empty);
+    
+    // finds 1st empty dir entry
+    uint8_t dir_empty = get_first_dir_empty(current);
+    if(!dir_empty)
+        return;
+    printf("Dir empty: %d\n", dir_empty);
+    
+    // creates and add new dir to current dir
+    dir_t dir;
+    dir = *init_dir_entry(name, 0x01, (uint16_t)fat_empty);
+    current->dir[dir_empty] = dir;
+    
+    // creates file cluster
+    cluster_t cluster = *init_cluster();
+    
+    // updates fat
+    int fat_pos = (int)fat_empty + BOOT+TABLE;
+    table->fat[fat_pos] = (uint16_t)fat_empty;
+    set_fat(table);
+    
+    // saves new dir cluster
+    set_cluster((int)fat_empty, &cluster);
+    
+    // updates current dir cluster
+    current->dir[0].size += 0x0001;
+    printf(". dir size: %d <---\n", current->dir[0].size);
+    uint16_t current_first_block = current->dir[0].first_block;
+    int current_pos = 
+        current_first_block == 0xffff ? 0 : current_first_block;
+    set_cluster((int)current_pos, current);
+}
+
+void unlink(char* name){    // falta tirar o cluster da fat
+    
+    char filename[18];
+    int flag = FALSE;
+    
+    for(int i = 2; i < (CLUSTER/sizeof(dir_t)) -2; i++){
+        hextoc(current->dir[i].filename, filename);
+        if(!strcmp(filename, name)){
+            flag = TRUE;
+            
+            int offset = (int)current->dir[i].first_block;
+            cluster_t cluster = *init_cluster();
+            set_cluster(offset, &cluster);
+            
+            dir_t dir = *init_dir_entry("", 0x00, 0x0000);
+            current->dir[i] = dir;
+            
+            current->dir[0].size -= 0x0001;
+        }
+    }
+    
+    uint16_t current_first_block = current->dir[0].first_block;
+    int current_pos = 
+        current_first_block == 0xffff ? 0 : current_first_block;
+    set_cluster(current_pos, current);
+    
+    if(flag) printf("Unlinked!!\n");
+    else printf("Nothing to unlike!!\n");
+}
+
+
 
 
 
@@ -125,11 +189,15 @@ void mkdir(char* name){
 
 void ls(){
     
-    char name[18];
+    char name[23];
     
     for(int i = 0; i < CLUSTER/sizeof(dir_t); i++){
         hextoc(current->dir[i].filename, name);
-        if(strcmp(name, ""))
-            printf("%d: %s \n", i, name);
+        if(strcmp(name, "")){
+            if(current->dir[i].attributes == 0x01)
+                strcat(name, ".txt");
+            printf("%s \t", name);
+        }
     }
+    printf("\n");
 }

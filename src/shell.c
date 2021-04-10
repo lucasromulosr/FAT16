@@ -38,6 +38,10 @@ void execute(entry_t* entry){
                 mkdir(entry->path);
                         break;
         case DOC_TYPE:
+            if(!strcmp(comm, "create"))
+                create(entry->path);
+            if(!strcmp(comm, "unlink"))
+                unlink(entry->path);
                         break;
         case STR_TYPE:
                         break;
