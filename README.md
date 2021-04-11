@@ -12,7 +12,7 @@ make install
 
 ### Descrição
 
-Comandos  
+
      Comando                 | Descrição                                         
      ----------------------- | ------------------------------------------------- 
      help                    | Imprime ajuda                                     
