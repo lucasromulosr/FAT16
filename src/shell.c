@@ -31,6 +31,7 @@ void execute(entry_t* entry){
             if(!strcmp(comm, "ls")) ls();
             if(!strcmp(comm, "init")) init();
             if(!strcmp(comm, "load")) load();
+            if(!strcmp(comm, "help")) help();
             break;
                         
         case DIR_TYPE:
