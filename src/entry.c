@@ -74,7 +74,7 @@ int verify_command(char* command){
     
     int type;
     
-    type = strcmp(command, "init") * strcmp(command, "load");
+    type = strcmp(command, "init") * strcmp(command, "load") *strcmp(command, "help");
     type *= strcmp(command, "ls");
     if(!type) return EXEC_TYPE;
     
