@@ -199,9 +199,9 @@ void help(){
     printf("| ----------------------- | ------------------------------------------------- |\n");
     printf("| unlink                  | Excluir arquivo ou diretório                      |\n");
     printf("| ----------------------- | ------------------------------------------------- |\n");
-    printf("| write \"string\"          | Escrever dados em um arquivo                      |\n");
+    printf("| write \"string\"        | Escrever dados em um arquivo                      |\n");
     printf("| ----------------------- | ------------------------------------------------- |\n");
-    printf("| append \"string\"         | Anexar dados em um arquivo                        |\n");
+    printf("| append \"string\"       | Anexar dados em um arquivo                        |\n");
     printf("| ----------------------- | ------------------------------------------------- |\n");
     printf("| read                    | Lê o conteúdo de um arquivo                       |\n");
     printf("| ----------------------- | ------------------------------------------------- |\n");
