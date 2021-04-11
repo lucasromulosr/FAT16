@@ -181,11 +181,34 @@ void unlink(char* name){    // falta tirar o cluster da fat
     else printf("Nothing to unlike!!\n");
 }
 
+void help(){
+    printf("| ----------------------- | ------------------------------------------------- |\n");
+    printf("| Comando                 | Descrição                                         |\n");
+	printf("| ----------------------- | ------------------------------------------------- |\n");
+    printf("| help                    | Imprime ajuda                                     |\n");
+    printf("| ----------------------- | ------------------------------------------------- |\n");
+    printf("| init                    | Inicializar o sistema de arquivos                 |\n");
+    printf("| ----------------------- | ------------------------------------------------- |\n");
+    printf("| load                    | Carregar o sistema de arquivos do disco           |\n");
+	printf("| ----------------------- | ------------------------------------------------- |\n");
+    printf("| ls                      | Lista diretório                                   |\n");
+	printf("| ----------------------- | ------------------------------------------------- |\n");
+    printf("| mkdir                   | Cria diretório                                    |\n");
+	printf("| ----------------------- | ------------------------------------------------- |\n");
+    printf("| creat                   | Cria arquivo                                      |\n");
+	printf("| ----------------------- | ------------------------------------------------- |\n");
+    printf("| unlink                  | Excluir arquivo ou diretório                      |\n");
+    printf("| ----------------------- | ------------------------------------------------- |\n");
+    printf("| write \"string\"          | Escrever dados em um arquivo                      |\n");
+	printf("| ----------------------- | ------------------------------------------------- |\n");
+    printf("| append \"string\"         | Anexar dados em um arquivo                        |\n");
+	printf("| ----------------------- | ------------------------------------------------- |\n");
+    printf("| read                    | Lê o conteúdo de um arquivo                       |\n");
+	printf("| ----------------------- | ------------------------------------------------- |\n");
+    printf("| exit                    | Sai do simulador                                  |\n");
+    printf("| ----------------------- | ------------------------------------------------- |\n");
 
-
-
-
-
+}
 
 void ls(){
     
