@@ -13,8 +13,8 @@ make install
 ### Descrição
 
 Comandos  
-    | ----------------------- | ------------------------------------------------- |
     | Comando                 | Descrição                                         |
+    | ----------------------- | ------------------------------------------------- |
     | help                    | Imprime ajuda                                     |
     | init                    | Inicializar o sistema de arquivos                 |
     | load                    | Carregar o sistema de arquivos do disco           |
