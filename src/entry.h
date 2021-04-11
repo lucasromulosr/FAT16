@@ -13,7 +13,8 @@
 #define EXIT_TYPE 5
 
 #define COMMAND_SIZE 10
-#define STRING_SIZE 50
+#define PATH_SIZE 20
+#define STRING_SIZE 100
 
 typedef struct entry_t{
     int type;
@@ -31,8 +32,5 @@ char* extract_string(char*, int*);
 char* extract_path(char*, int*);
 
 int verify_command(char*);
-
-
-
 
 #endif

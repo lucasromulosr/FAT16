@@ -22,9 +22,9 @@ typedef struct table_t{
 } table_t;
 
 typedef struct dir_t{
-    uint8_t filename[18];   // 18
+    uint8_t filename[18];
     uint8_t attributes;
-    uint8_t reserved[7];    // 7
+    uint8_t reserved[7];
     uint16_t first_block;
     uint32_t size;
 } dir_t;
@@ -36,13 +36,15 @@ typedef union cluster_t{
 
 } cluster_t ;
 
+
 /**** flag fat_loaded ****/
 int get_fat_loaded();
 void set_fat_loaded(int);
+int check_sys_load();
 
 /**** convertions ****/
-uint8_t* ctohex(char*, uint8_t*);
-char* hextoc(uint8_t*, char*);
+void ctohex(int, char*, uint8_t*);
+void hextoc(int, uint8_t*, char*);
 
 /**** init ****/
 cluster_t* init_cluster();
@@ -62,18 +64,17 @@ void set_fat(table_t*);
 void set_cluster(int, cluster_t*);
 
 
-
+/**** system ****/
+void ls();
 void help();
 void init();
 void load();
-void ls();
 void mkdir(char*);
 void create(char*);
 void unlink(char*);
-
-
-
-
+void read(char*);
+void write(char*, char*);
+void append(char*, char*);
 
 
 #endif

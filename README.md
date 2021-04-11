@@ -1,11 +1,12 @@
 # FAT16
-##### v0.2.0 
+##### v1.0.0 
 
 ### Execucao
 ```
 cd pasta/do/projeto/
 make
 make install
+./fat_sys
 
 ```
  

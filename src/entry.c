@@ -1,13 +1,14 @@
 #include "entry.h"
 
-#define INPUT_SIZE 100
+#define INPUT_SIZE 130
 
+/** creates a empty entry **/
 entry_t* new_entry(){
     
     entry_t* entry;
     entry = (entry_t*) malloc (sizeof(entry_t));
     entry->command = (char*) malloc (COMMAND_SIZE * sizeof(char));
-    entry->path = (char*) malloc (STRING_SIZE * sizeof(char));
+    entry->path = (char*) malloc (PATH_SIZE * sizeof(char));
     entry->string = (char*) malloc (STRING_SIZE * sizeof(char));
         
     entry->type = 0;
@@ -18,6 +19,7 @@ entry_t* new_entry(){
     return entry;
 }
 
+/** reads a entry **/
 entry_t* read_entry(){
 
     char input[INPUT_SIZE];
@@ -25,8 +27,9 @@ entry_t* read_entry(){
     entry_t* entry;
     entry = new_entry();
     
-    int type;   // command type // explicar os tipos
+    int type;       // command type
     do {
+        printf("$ ");
         fgets(input, INPUT_SIZE, stdin);
         
         int index;     // index in the input
@@ -70,6 +73,7 @@ entry_t* read_entry(){
     } while (!type);
 }
 
+/** sets command type **/
 int verify_command(char* command){
     
     int type;
@@ -94,6 +98,7 @@ int verify_command(char* command){
     return 0;
 }
 
+/** reads entry command **/
 char* extract_command(char* input, int* i){
     
     char* command;
@@ -107,10 +112,11 @@ char* extract_command(char* input, int* i){
     return command;
 }
 
+/** reads entry path **/
 char* extract_path(char* input, int* i){
     
     char* path;
-    path = (char*) malloc (STRING_SIZE * sizeof(char));
+    path = (char*) malloc (PATH_SIZE * sizeof(char));
     
     int index = 0;  // path index
     
@@ -127,6 +133,7 @@ char* extract_path(char* input, int* i){
     return path;
 }
 
+/** reads entry string **/
 char* extract_string(char* input, int* i){
     
     char* string;

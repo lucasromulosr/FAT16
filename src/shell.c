@@ -28,25 +28,34 @@ void execute(entry_t* entry){
     switch(opt){
         
         case EXEC_TYPE:
-            if(!strcmp(comm, "ls")) ls();
-            if(!strcmp(comm, "init")) init();
-            if(!strcmp(comm, "load")) load();
-            if(!strcmp(comm, "help")) help();
-            break;
+                        if(!strcmp(comm, "ls")) ls();
+                        if(!strcmp(comm, "init")) init();
+                        if(!strcmp(comm, "load")) load();
+                        if(!strcmp(comm, "help")) help();
+                        break;
+                        
                         
         case DIR_TYPE:
-            if(!strcmp(comm, "mkdir"))
-                mkdir(entry->path);
+                        if(!strcmp(comm, "mkdir"))
+                            mkdir(entry->path);
                         break;
+                        
+                        
         case DOC_TYPE:
-            if(!strcmp(comm, "create"))
-                create(entry->path);
-            if(!strcmp(comm, "unlink"))
-                unlink(entry->path);
+                        if(!strcmp(comm, "create"))
+                            create(entry->path);
+                        if(!strcmp(comm, "unlink"))
+                            unlink(entry->path);
+                        if(!strcmp(comm, "read"))
+                            read(entry->path);
                         break;
+                        
+                        
         case STR_TYPE:
+                        if(!strcmp(comm, "write"))
+                            write(entry->path, entry->string);
+                        if(!strcmp(comm, "append"))
+                            append(entry->path, entry->string);
                         break;
-        
     }
-    
 }
