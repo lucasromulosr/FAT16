@@ -63,7 +63,7 @@ void set_cluster(int, cluster_t*);
 
 
 
-
+void help();
 void init();
 void load();
 void ls();
