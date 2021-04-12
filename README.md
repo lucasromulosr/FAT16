@@ -1,5 +1,5 @@
 # FAT16
-##### v1.1.2 
+> v1.1.2 
 
 ### Execucao
 ```
@@ -7,7 +7,6 @@ cd pasta/do/projeto/
 make
 make install
 ./fat_sys
-
 ```
  
 
@@ -20,13 +19,13 @@ make install
      init                    | Inicializar o sistema de arquivos                 
      load                    | Carregar o sistema de arquivos do disco           
      ls                      | Lista diretório                                   
-     mkdir                   | Cria diretório                                    
+     mkdir [path]            | Cria diretório                                    
      cd [path]               | Altera o diretório atual para o caminho informado 
-     creat                   | Cria arquivo                                      
-     unlink                  | Excluir arquivo ou diretório                      
+     creat [path]            | Cria arquivo                                      
+     unlink [path]           | Excluir arquivo ou diretório                      
      write \"string\" [path] | Escrever dados em um arquivo                      
      append \"string\"[path] | Anexar dados em um arquivo                        
-     read                    | Lê o conteúdo de um arquivo                        
+     read [path]             | Lê o conteúdo de um arquivo                        
      exit                    | Sai do simulador                                  
 
     
