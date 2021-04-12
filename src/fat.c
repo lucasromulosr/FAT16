@@ -137,7 +137,7 @@ void cd(char* name){
         
         hextoc(18, current->dir[i].filename, filename);
         
-        if(!strcmp(name, filename) && current->dir[i].first_block){
+        if(!strcmp(name, filename) && current->dir[i].attributes){
             printf("Cannot cd to a file!!\n");
             return;
         }
