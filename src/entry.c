@@ -71,6 +71,7 @@ entry_t* read_entry(){
             printf("Invalid command!!\n");
         
     } while (!type);
+    return NULL;
 }
 
 /** sets command type **/

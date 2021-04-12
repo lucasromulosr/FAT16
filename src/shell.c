@@ -36,6 +36,8 @@ void execute(entry_t* entry){
                         
                         
         case DIR_TYPE:
+                        if(!strcmp(comm, "cd"))
+                            cd(entry->path);
                         if(!strcmp(comm, "mkdir"))
                             mkdir(entry->path);
                         break;

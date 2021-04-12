@@ -124,6 +124,38 @@ void mkdir(char* name){
     set_cluster((int)current_pos, current);
 }
 
+/** goes to the dir **/
+void cd(char* name){
+    
+    // check flag fat loaded
+    if(!check_sys_load()) return;
+    
+    char filename[18];
+    int flag = FALSE;
+    
+    for(int i = 0; i < CLUSTER/sizeof(dir_t); i++){
+        hextoc(18, current->dir[i].filename, filename);
+        if(!strcmp(name, filename)){
+            
+            // gets offset
+            int offset;
+            offset = current->dir[i].first_block == 0xffff ? 
+                0 : (int)current->dir[i].first_block;
+            
+            // gets dir
+            cluster_t* cluster;
+            cluster = get_cluster(offset);
+            
+            // sets current dir
+            current = cluster;
+            
+            flag = TRUE;
+        }
+    }
+    if(flag) printf("Current path: %s!!\n", name);
+    else printf("Couldnt cd!!\n");
+}
+
 /** creates a new file in the curr dir **/
 void create(char* name){
     
@@ -229,6 +261,7 @@ void read(char* path){
     
     char filename[18];
     char texto[CLUSTER];
+    int flag = FALSE;
     
     for(int i = 2; i < (int)current->dir[0].size + 2; i++){
         
@@ -249,8 +282,10 @@ void read(char* path){
             cluster_t cluster = *get_cluster(offset);
             hextoc(CLUSTER, cluster.data, texto);
             printf("%s\n", texto);
+            flag = TRUE;
         }
     }
+    if(!flag) printf("Couldnt find a file!!\n");
 }
 
 /** overwrites a file **/
@@ -261,6 +296,7 @@ void write(char* path, char* string){
     
     char filename[18];
     uint8_t data[100];
+    int flag = FALSE;
 
     for(int i = 2; i < (int)current->dir[0].size + 2; i++){
         
@@ -287,7 +323,7 @@ void write(char* path, char* string){
             for(int i = 0; i < strlen(string); i++)
                 cluster.data[i] = data[i];
             set_cluster(offset, &cluster);
-
+            flag = TRUE;
         }
     }
         
@@ -297,7 +333,8 @@ void write(char* path, char* string){
         current_first_block == 0xffff ? 0 : current_first_block;
     set_cluster(current_pos, current);
     
-    printf("Doc writed!!\n");
+    if(flag) printf("Doc writed!!\n");
+    else printf("Couldnt write the file!!\n");
 }
 
 /** append contents to file **/
@@ -308,6 +345,7 @@ void append(char* path, char* string){
     
     char filename[18];
     uint8_t data[100];
+    int flag = FALSE;
 
     for(int i = 2; i < (int)current->dir[0].size + 2; i++){
         
@@ -336,6 +374,7 @@ void append(char* path, char* string){
             for(int i = 0; i < strlen(string); i++)
                 cluster.data[file_size+i] = data[i];
             set_cluster(offset, &cluster);
+            flag = TRUE;
         }
     }
         
@@ -345,7 +384,8 @@ void append(char* path, char* string){
         current_first_block == 0xffff ? 0 : current_first_block;
     set_cluster(current_pos, current);
     
-    printf("Doc writed!!\n");
+    if(flag) printf("Doc writed!!\n");
+    else printf("Couldnt append at file!!\n");
 }
 
 void help(){

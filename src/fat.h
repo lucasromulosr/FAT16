@@ -69,6 +69,7 @@ void ls();
 void help();
 void init();
 void load();
+void cd(char*);
 void mkdir(char*);
 void create(char*);
 void unlink(char*);
