@@ -134,7 +134,14 @@ void cd(char* name){
     int flag = FALSE;
     
     for(int i = 0; i < CLUSTER/sizeof(dir_t); i++){
+        
         hextoc(18, current->dir[i].filename, filename);
+        
+        if(!strcmp(name, filename) && current->dir[i].first_block){
+            printf("Cannot cd to a file!!\n");
+            return;
+        }
+        
         if(!strcmp(name, filename)){
             
             // gets offset
