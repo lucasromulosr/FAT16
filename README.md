@@ -23,8 +23,8 @@ make install
      mkdir                   | Cria diretório                                     
      creat                   | Cria arquivo                                      
      unlink                  | Excluir arquivo ou diretório                      
-     write \"string\"        | Escrever dados em um arquivo                      
-     append \"string\"       | Anexar dados em um arquivo                        
+     write \"string\" [path] | Escrever dados em um arquivo                      
+     append \"string\"[path] | Anexar dados em um arquivo                        
      read                    | Lê o conteúdo de um arquivo                        
      exit                    | Sai do simulador                                  
 

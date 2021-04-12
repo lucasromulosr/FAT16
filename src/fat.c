@@ -402,13 +402,13 @@ void help(){
     printf("| ----------------------- | ------------------------------------------------- |\n");
     printf("| mkdir                   | Cria diretório                                    |\n");
     printf("| ----------------------- | ------------------------------------------------- |\n");
-    printf("| creat                   | Cria arquivo                                      |\n");
+    printf("| create                  | Cria arquivo                                      |\n");
     printf("| ----------------------- | ------------------------------------------------- |\n");
     printf("| unlink                  | Excluir arquivo ou diretório                      |\n");
     printf("| ----------------------- | ------------------------------------------------- |\n");
-    printf("| write \"string\"          | Escrever dados em um arquivo                      |\n");
+    printf("| write \"string\" [path]   | Escrever dados em um arquivo                      |\n");
     printf("| ----------------------- | ------------------------------------------------- |\n");
-    printf("| append \"string\"         | Anexar dados em um arquivo                        |\n");
+    printf("| append \"string\" [path]  | Anexar dados em um arquivo                        |\n");
     printf("| ----------------------- | ------------------------------------------------- |\n");
     printf("| read                    | Lê o conteúdo de um arquivo                       |\n");
     printf("| ----------------------- | ------------------------------------------------- |\n");
