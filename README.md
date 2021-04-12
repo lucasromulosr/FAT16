@@ -20,7 +20,8 @@ make install
      init                    | Inicializar o sistema de arquivos                 
      load                    | Carregar o sistema de arquivos do disco           
      ls                      | Lista diretório                                   
-     mkdir                   | Cria diretório                                     
+     mkdir                   | Cria diretório                                    
+     cd [path]               | Altera o diretório atual para o caminho informado 
      creat                   | Cria arquivo                                      
      unlink                  | Excluir arquivo ou diretório                      
      write \"string\" [path] | Escrever dados em um arquivo                      
