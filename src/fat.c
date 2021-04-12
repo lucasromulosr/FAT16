@@ -3,8 +3,6 @@
 table_t* table;
 cluster_t* current;
 
-char file_path[50] = "fat.part";
-
 /** list dir contents **/
 void ls(){
     
@@ -26,7 +24,7 @@ void ls(){
 // wipes all the previously data
 void init(){
     
-    FILE* file = fopen(file_path, "w");
+    FILE* file = fopen("fat.part", "w");
     
     cluster_t* boot = init_boot();
     table = init_fat();
@@ -64,7 +62,7 @@ void init(){
 /** loads FAT table and / **/
 void load(){
 
-    FILE* file = fopen(file_path, "r");
+    FILE* file = fopen("fat.part", "r");
     
     if(file == NULL)
         printf("There is no FAT system in the disk!!\n");
