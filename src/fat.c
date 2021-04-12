@@ -11,15 +11,12 @@ void ls(){
     // check flag fat loaded
     if(!check_sys_load()) return;
     
-    char name[23];
+    char name[18];
     
     for(int i = 0; i < CLUSTER/sizeof(dir_t); i++){
         hextoc(18, current->dir[i].filename, name);
-        if(strcmp(name, "")){
-            if(current->dir[i].attributes == 0x01)
-                strcat(name, ".txt");
+        if(strcmp(name, ""))
             printf("%s \t", name);
-        }
     }
     
     printf("\n");
