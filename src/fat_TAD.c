@@ -94,6 +94,21 @@ cluster_t init_dir(uint16_t root, uint16_t first_block){
 }
 
 
+/**** verify ****/
+/** checks if theres dir/file w/ the same name **/
+int verify_existing_name(char* name, cluster_t* cluster){
+    
+    char filename[18];
+    
+    // checks validation
+    for(int i = 0; i < CLUSTER/sizeof(dir_t); i++){
+        hextoc(18, cluster->dir[i].filename, filename);
+        if(!strcmp(name, filename))
+            return TRUE;
+    }
+    return FALSE;
+}
+
 /**** get ****/
 /** gets the location of the first empty cluster **/
 uint16_t get_first_fat_empty(table_t* table){

@@ -99,6 +99,12 @@ void mkdir(char* name){
     if(!dir_empty)
         return;
     
+    // checks if theres a dir/file w/ that same name
+    if(verify_existing_name(name, current)){
+        printf("Theres already a dir/file w/ that name!!\n");
+        return;
+    }
+    
     // creates and add new dir to current dir
     dir_t dir;
     dir = *init_dir_entry(name, 0x00, (uint16_t)fat_empty);
@@ -178,6 +184,12 @@ void create(char* name){
     uint8_t dir_empty = get_first_dir_empty(current);
     if(!dir_empty)
         return;
+    
+    // checks if theres a dir/file w/ that same name
+    if(verify_existing_name(name, current)){
+        printf("Theres already a dir/file w/ that name!!\n");
+        return;
+    }
     
     // creates and add new dir to current dir
     dir_t dir;
@@ -375,6 +387,12 @@ void append(char* path, char* string){
             int file_size = (int)current->dir[i].size;
             int size = file_size + strlen(string);
             current->dir[i].size = (uint32_t)size;
+            
+            // verifies if the size exceeds
+            if(size > CLUSTER){
+                printf("File exceeds limit size!!\n");
+                return;
+            }
 
             // creates new empty cluster, writes, saves
             cluster_t cluster = *get_cluster(offset);

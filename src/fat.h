@@ -53,6 +53,9 @@ table_t* init_fat();
 dir_t* init_dir_entry(char*, uint8_t, uint16_t);  
 cluster_t init_dir(uint16_t, uint16_t);
 
+/** verify **/
+int verify_existing_name(char*, cluster_t*);
+
 /**** get ****/
 table_t* get_fat();
 cluster_t* get_cluster(int);
@@ -62,7 +65,6 @@ uint8_t get_first_dir_empty(cluster_t*);
 /**** set ****/
 void set_fat(table_t*);
 void set_cluster(int, cluster_t*);
-
 
 /**** system ****/
 void ls();
