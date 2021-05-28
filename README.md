@@ -23,8 +23,8 @@ make install
      cd [path]               | Altera o diretório atual para o caminho informado 
      creat [path]            | Cria arquivo                                      
      unlink [path]           | Excluir arquivo ou diretório                      
-     write \"string\" [path] | Escrever dados em um arquivo                      
-     append \"string\"[path] | Anexar dados em um arquivo                        
+     write "string" [path]   | Escrever dados em um arquivo                      
+     append "string"[path]   | Anexar dados em um arquivo                        
      read [path]             | Lê o conteúdo de um arquivo                        
      exit                    | Sai do simulador                                  
 
