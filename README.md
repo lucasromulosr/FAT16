@@ -24,7 +24,7 @@ make install
      creat [path]            | Cria arquivo                                      
      unlink [path]           | Excluir arquivo ou diretório                      
      write "string" [path]   | Escrever dados em um arquivo                      
-     append "string"[path]   | Anexar dados em um arquivo                        
+     append "string" [path]  | Anexar dados em um arquivo                        
      read [path]             | Lê o conteúdo de um arquivo                        
      exit                    | Sai do simulador                                  
 
